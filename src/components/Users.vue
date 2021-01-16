@@ -1,22 +1,38 @@
 <template>
     <div>
-        <div v-for="x in 10" :key="x" class="result-card flex flex-row w-full h-28 mt-4 bg-whiteb rounded-xl">
-            <!-- <div class="result-card flex flex-row w-full h-28 mt-4 bg-whiteb rounded-xl"> -->
+        <div
+            v-for="(user, index) in users"
+            :key="index"
+            class="result-card flex flex-row w-full max-h-48 mt-4 bg-whiteb rounded-xl"
+        >
             <div class="w-32 flex justify-center items-center">
-                <img src="../assets/images/github4O4.png" alt="" class="user-image h-20 w-20 rounded-full" />
+                <img
+                    :src="user.picture.medium"
+                    :alt="`${user.name.last} ${user.name.first}`"
+                    class="user-image h-20 w-20 rounded-full"
+                />
             </div>
             <div class="flex flex-col user-details py-3">
-                <div class="user-name">Shalom Chioma</div>
-                <div class="user-address">9278 new road, kilcoole, waterford</div>
+                <div class="user-name">{{ user.name.last }} {{ user.name.first }}</div>
+                <div class="user-address">
+                    {{ user.location.street.number }} {{ user.location.street.name }}, {{ user.location.city }},
+                    {{ user.location.state }}
+                </div>
+                <div class="user-country" v-if="show_country">
+                    {{ user.location.country }}
+                </div>
                 <div class="user-contact flex flex-row">
                     <font-awesome-icon :icon="['far', 'envelope']" class="contact-icon" />
-                    <div class="user-email">brad.gibson@example.com</div>
+                    <div class="user-email">{{ user.email }}</div>
                     <font-awesome-icon :icon="['fas', 'phone-volume']" class="contact-icon phone-icon ml-3" />
-                    <div class="user-phone">011-962-7516</div>
+                    <div class="user-phone">{{ user.phone }}</div>
                 </div>
             </div>
-            <div class="nav flex justify-center items-end pb-5 pl-5">
-                <button class="full-details flex justify-center items-center w-8 h-8 rounded-lg bg-teal3">
+            <div class="nav w-16 md:w-20 flex justify-center items-center">
+                <button
+                    class="full-details flex justify-center items-center w-8 h-8 rounded-lg bg-teal3"
+                    @click="getUserDetails(user)"
+                >
                     <font-awesome-icon :icon="['fas', 'arrow-right']" class="next-icon text-white" />
                 </button>
             </div>
@@ -25,7 +41,32 @@
 </template>
 
 <script>
-export default {}
+export default {
+    props: {
+        users: {
+            type: Array,
+            required: true
+        },
+        show_country: {
+            type: Boolean,
+            required: true
+        }
+    },
+
+    data() {
+        return {
+            window_type: 'UserDetails'
+        }
+    },
+
+    methods: {
+        getUserDetails(selected_user) {
+            console.log(selected_user)
+            this.$emit('changeWindowtype')
+            // this.$emit(this.window_type)
+        }
+    }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -43,6 +84,10 @@ $teal2: #75d6d1;
     box-sizing: border-box;
 }
 
+.result_card {
+    cursor: default;
+}
+
 .user {
     &-image {
         object-fit: contain;
@@ -55,7 +100,8 @@ $teal2: #75d6d1;
         font-size: 16px;
         font-weight: 600;
     }
-    &-address {
+    &-address,
+    &-country {
         margin: 10px 0;
         font-size: 12px;
         font-weight: 400;
@@ -82,5 +128,19 @@ $teal2: #75d6d1;
 
 .full-details {
     box-shadow: 2px 5px 10px #30bbb574;
+    transition: 0.25s all;
+}
+
+.full-details:hover,
+.full-details:hover .next-icon,
+.full-details:focus .next-icon,
+.full-details:focus {
+    border: none;
+    outline: none;
+    color: $teal2;
+    background-color: #ffffff;
+    z-index: 1.1;
+    cursor: default;
+    transform: scale(1.1);
 }
 </style>
