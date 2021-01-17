@@ -35,7 +35,7 @@
                             <font-awesome-icon :icon="['fas', card.icon]" size="2x" />
                         </div>
 
-                        <div class="card-title capitalize mt-4">{{ card.title }}</div>
+                        <div class="card-title text-center capitalize mt-4">{{ card.title }}</div>
                     </div>
                 </div>
             </div>
@@ -44,7 +44,7 @@
         <div class="w-full h-full p-4 overflow-hidden">
             <div class="bg-gray1 w-full h-full rounded-2xl px-14 py-12">
                 <div class="w-full h-full rounded-2xl font-blackl">
-                    <div class="window-title capitalize">{{ user_group }}</div>
+                    <div class="window-title capitalize">{{ section_name }}</div>
 
                     <div class="filter-title capitalize">Filter By</div>
 
@@ -83,8 +83,19 @@
                     </div>
 
                     <div class="result-window w-full h-96 md:h-2/3 rounded-xl mt-6 overflow-y-auto">
-                        <users v-if="window_type === 'Users'" :users="userList" :show_country="show_country" />
-                        <user-details v-if="window_type === 'UserDetails'" />
+                        <!-- <users v-if="window_type === 'Users'" :users="userList" :show_country="show_country" /> -->
+                        <template v-if="window_type === 'Users'">
+                            <users
+                                v-for="(user, index) in userList"
+                                :key="index"
+                                :user="user"
+                                :show_country="show_country"
+                                @userN="something($event)"
+                            />
+                        </template>
+                        <template v-if="window_type === 'UserDetails'">
+                            <user-details :userInfo="userInfo" @new-window-type="changeWindow()" />
+                        </template>
                     </div>
 
                     <div class="window-options flex flex-row mt-8">
@@ -157,13 +168,20 @@ export default {
             ],
 
             queryTerm: '',
-            user_group: 'No User Found',
-            show_country: false,
-            page_number: 0,
+            section_name: 'No User Found',
             window_type: 'Users',
             userList: [],
+            userInfo: null,
+            show_country: false,
+            page_number: 0,
             size: 10
         }
+    },
+
+    computed: {},
+
+    created() {
+        return this.getUserGroup(1)
     },
 
     methods: {
@@ -222,7 +240,7 @@ export default {
 
                     console.log('Result found.')
                     this.userList = results
-                    this.user_group = this.cards[userType].title
+                    this.section_name = this.cards[userType].title
                     return
                 }
             } catch (e) {
@@ -231,25 +249,21 @@ export default {
                 alert('Error fetching data. Please try again.')
             }
             return
+        },
+
+        something(qwert) {
+            // console.log('Something active')
+            this.window_type = 'UserDetails'
+            this.section_name = 'User Details'
+            // console.log(qwert)
+            this.userInfo = qwert
+        },
+
+        changeWindow() {
+            // alert('Hello')
+            this.window_type = 'Users'
+            // alert((this.window_type = 'Users'))
         }
-
-        // changeWindowType() {
-        //     this.window_type = 'UserDetails'
-        // }
-    },
-
-    // computed: {
-    //     newWindowType() {
-    //         return this.changeWindowType
-    //     }
-    // },
-
-    created() {
-        // newWindowType() {
-        //     return this.changeWindowType
-        // },
-        // this.changeWindowType()
-        // this.getUsers()
     }
 }
 </script>
@@ -257,7 +271,7 @@ export default {
 
 
 <style lang="scss" scoped>
-// $teal2: #75d6d1;
+$teal2: #75d6d1;
 
 $teal3: #30bbb5;
 
@@ -574,6 +588,7 @@ label:active::after {
     transition: all 0.5s;
 }
 
+.navigate:hover,
 .navigate:focus,
 .navigate:active {
     border: none;

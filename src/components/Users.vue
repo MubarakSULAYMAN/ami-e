@@ -1,10 +1,6 @@
 <template>
     <div>
-        <div
-            v-for="(user, index) in users"
-            :key="index"
-            class="result-card flex flex-row w-full max-h-48 mt-4 bg-whiteb rounded-xl"
-        >
+        <div class="result-card flex flex-row w-full max-h-48 mt-4 bg-whiteb rounded-xl">
             <div class="w-32 flex justify-center items-center">
                 <img
                     :src="user.picture.medium"
@@ -13,19 +9,25 @@
                 />
             </div>
             <div class="flex flex-col user-details py-3">
-                <div class="user-name">{{ user.name.last }} {{ user.name.first }}</div>
-                <div class="user-address">
-                    {{ user.location.street.number }} {{ user.location.street.name }}, {{ user.location.city }},
+                <div class="user-name mt-1">
+                    {{ user.name.last }}
+                    {{ user.name.first }}
+                    <!-- | replaceEmpty('name') -->
+                </div>
+                <div class="user-address mt-1">
+                    {{ user.location.street.number }}
+                    {{ user.location.street.name }}, {{ user.location.city }},
                     {{ user.location.state }}
+                    <!-- | replaceEmpty('address') -->
                 </div>
-                <div class="user-country" v-if="show_country">
-                    {{ user.location.country }}
+                <div class="user-country mt-1" v-if="show_country">
+                    {{ user.location.country | replaceEmpty('country') }}
                 </div>
-                <div class="user-contact flex flex-row">
+                <div class="user-contact flex flex-row mt-1">
                     <font-awesome-icon :icon="['far', 'envelope']" class="contact-icon" />
-                    <div class="user-email">{{ user.email }}</div>
+                    <div class="user-email">{{ user.email | truncateEmail }}</div>
                     <font-awesome-icon :icon="['fas', 'phone-volume']" class="contact-icon phone-icon ml-3" />
-                    <div class="user-phone">{{ user.phone }}</div>
+                    <div class="user-phone">{{ user.phone | replaceEmpty('phone') }}</div>
                 </div>
             </div>
             <div class="nav w-16 md:w-20 flex justify-center items-center">
@@ -42,9 +44,47 @@
 
 <script>
 export default {
+    filters: {
+        replaceEmpty(value, title) {
+            if (!value) {
+                return `No ${title} Provided.`
+            } else return value
+        },
+
+        truncateEmail(value) {
+            if (!value) {
+                return 'No email Provided.'
+            }
+
+            value = value.toString()
+
+            if (value.length > 19) {
+                value = value.slice(0, 21) + '...'
+                return value
+            } else return value
+        },
+
+        truncateBio(value) {
+            if (!value) {
+                return 'No Bio Provided'
+            }
+
+            value = value.toString()
+
+            if (value.length > 37) {
+                value = value.slice(0, 34) + '...'
+                return value
+            } else return value
+        }
+
+        // formatNum(num) {
+        //   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        // },
+    },
+
     props: {
-        users: {
-            type: Array,
+        user: {
+            type: Object,
             required: true
         },
         show_country: {
@@ -61,9 +101,13 @@ export default {
 
     methods: {
         getUserDetails(selected_user) {
-            console.log(selected_user)
-            this.$emit('changeWindowtype')
-            // this.$emit(this.window_type)
+            // console.log(selected_user)
+            // this.window_type = 'UserDetails'
+            // this.section_name = 'User Details'
+            this.userInfo = selected_user
+            this.$emit('userN', this.userInfo)
+            // this.$emit('userN')
+            // console.log('Hello')
         }
     }
 }
@@ -102,7 +146,7 @@ $teal2: #75d6d1;
     }
     &-address,
     &-country {
-        margin: 10px 0;
+        // margin: 5px 0;
         font-size: 12px;
         font-weight: 400;
         font-style: italic;
