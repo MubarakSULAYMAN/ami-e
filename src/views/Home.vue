@@ -83,7 +83,30 @@
                     </div>
 
                     <div class="result-window w-full h-96 md:h-2/3 rounded-xl mt-6 overflow-y-auto">
-                        <!-- <users v-if="window_type === 'Users'" :users="userList" :show_country="show_country" /> -->
+                        <img
+                            src="../assets/images/github4O4.png"
+                            alt="No result found"
+                            class="no-result"
+                            v-if="emptyPage && $route.query.name"
+                        />
+
+                        <font-awesome-icon
+                            :icon="['fas', 'sync-alt']"
+                            spin
+                            size="10x"
+                            :style="{ color: '#7272ff' }"
+                            class="sync"
+                            v-if="searchStatus === 'searching'"
+                        />
+
+                        <img
+                            src="../assets/images/githubHome.png"
+                            alt="Custom welcome page, with github octocat and two squirrels."
+                            class="welcome-image"
+                            v-if="emptyPage && !$route.query.name"
+                        />
+
+                        <!-- <transition name="slide" mode="out-in"> -->
                         <template v-if="window_type === 'Users'">
                             <users
                                 v-for="(user, index) in userList"
@@ -93,9 +116,12 @@
                                 @userN="something($event)"
                             />
                         </template>
+                        <!-- </transition>
+                        <transition name="slide" mode="in-out"> -->
                         <template v-if="window_type === 'UserDetails'">
                             <user-details :userInfo="userInfo" @new-window-type="changeWindow()" />
                         </template>
+                        <!-- </transition> -->
                     </div>
 
                     <div class="window-options flex flex-row mt-8">
@@ -117,15 +143,11 @@
             </div>
         </div>
 
-        <!-- <font-awesome-icon :icon="['fas', 'angle-left']" />
-
-
-
-        />
-
-
-
-        -->
+        <transition name="fly">
+            <div class="warning" v-if="isWarning">
+                <p>{{ message }}</p>
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -168,6 +190,7 @@ export default {
             ],
 
             queryTerm: '',
+            searchStatus: 'searching',
             section_name: 'No User Found',
             window_type: 'Users',
             userList: [],
@@ -187,20 +210,21 @@ export default {
     methods: {
         async getUsers() {
             if (this.queryTerm !== '') {
-                console.log('Searching...')
+                this.searchStatus = 'searching'
 
                 try {
                     let response = await apiRequest.get(`/api/?results=10&seed=${this.queryTerm}`)
 
                     if ([200, 201].includes(response.status)) {
                         let results = response.data.results
+                        this.searchStatus = 'notSearching'
 
                         if (results.length === 0) {
-                            alert(`Zero (0) results found for ${this.queryTerm}.`)
+                            this.showWarning(`Zero (0) results found for ${this.queryTerm}.`)
                             return
                         }
 
-                        console.log('Result found.')
+                        this.window_type = 'Users'
                         this.userList = results
                         // return
 
@@ -214,31 +238,32 @@ export default {
                         // })
                     }
                 } catch (e) {
-                    console.log(e)
+                    // console.log(e)
 
-                    alert('Error fetching data. Please try again.')
+                    this.showWarning('Error fetching data. Please try again.')
                 }
                 return
             }
 
-            alert('Please enter a valid name to start a search.')
+            this.showWarning('Please enter a valid name to start a search.')
         },
 
         async getUserGroup(userType) {
-            console.log('Searching...')
+            this.searchStatus = 'searching'
 
             try {
                 let response = await apiRequest.get(`/api/?results=10&gender=${this.cards[userType].name}`)
                 console.log(this.cards[userType].title)
                 if ([200, 201].includes(response.status)) {
                     let results = response.data.results
+                    this.searchStatus = 'notSearching'
 
                     if (results.length === 0) {
-                        alert(`Zero (0) results found for ${this.queryTerm}.`)
+                        this.showWarning(`Zero (0) results found for ${this.queryTerm}.`)
                         return
                     }
 
-                    console.log('Result found.')
+                    this.window_type = 'Users'
                     this.userList = results
                     this.section_name = this.cards[userType].title
                     return
@@ -246,23 +271,25 @@ export default {
             } catch (e) {
                 console.log(e)
 
-                alert('Error fetching data. Please try again.')
+                this.showWarning('Error fetching data. Please try again.')
             }
             return
         },
 
         something(qwert) {
-            // console.log('Something active')
             this.window_type = 'UserDetails'
             this.section_name = 'User Details'
-            // console.log(qwert)
             this.userInfo = qwert
         },
 
         changeWindow() {
-            // alert('Hello')
             this.window_type = 'Users'
-            // alert((this.window_type = 'Users'))
+        },
+
+        showWarning(message) {
+            this.message = message
+            this.isWarning = true
+            setTimeout(() => (this.isWarning = false), 5000)
         }
     }
 }
@@ -597,5 +624,80 @@ label:active::after {
     background-color: $blackl;
     z-index: 1;
     transform: scale(1.1);
+}
+
+.slide-enter {
+    transform: translateY(10px);
+}
+
+.slide-enter-active,
+.slide-leave-active {
+    transition: all 0.5s ease;
+}
+
+.slide-leave-to {
+    transform: translateY(-10px);
+}
+
+.warning {
+    position: fixed;
+    bottom: 34px;
+    left: 66px;
+    display: inline-block;
+    padding: 5px 10px;
+    border: 2px solid red;
+    border-radius: 5px;
+    font-size: 20px;
+    color: red;
+    box-shadow: 4px 4px red;
+    background-color: transparent;
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+    transition: all 0.5s;
+    z-index: 1111;
+}
+.fly-enter,
+.fly-leave-to {
+    transform: scaleY(0);
+    position: fixed;
+    bottom: -999px;
+    left: -999px;
+}
+.warning:hover {
+    transform: translate(4px, 4px);
+    box-shadow: none;
+}
+/* .warning .active {
+    position: fixed;
+    top: 999px;
+    right: -999px;
+  } */
+.warning p {
+    margin: 0;
+}
+.warning p .active {
+    position: fixed;
+    bottom: -999px;
+    left: 999px;
+}
+
+.sync {
+    position: fixed;
+    top: 40%;
+    left: 61.25%;
+    transform: translate(-50%, -50%);
+    z-index: 2222;
+}
+
+@media (max-width: 760px) {
+    .sync {
+        left: 36.25%;
+    }
+}
+
+@media (max-width: 425px) {
+    .sync {
+        left: 30%;
+    }
 }
 </style>
