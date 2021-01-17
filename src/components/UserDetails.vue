@@ -135,7 +135,7 @@ $teal2: #75d6d1;
 }
 
 .image {
-    object-fit: contain;
+    // object-fit: contain;
     border: 5px solid $teal2;
 }
 

@@ -83,28 +83,28 @@
                     </div>
 
                     <div class="result-window w-full h-96 md:h-2/3 rounded-xl mt-6 overflow-y-auto">
-                        <img
+                        <!-- <img
                             src="../assets/images/github4O4.png"
                             alt="No result found"
                             class="no-result"
                             v-if="emptyPage && $route.query.name"
-                        />
+                        /> -->
 
                         <font-awesome-icon
                             :icon="['fas', 'sync-alt']"
                             spin
                             size="10x"
-                            :style="{ color: '#7272ff' }"
-                            class="sync"
+                            :style="{ color: '#30bbb5' }"
+                            class="sync m-20"
                             v-if="searchStatus === 'searching'"
                         />
 
-                        <img
+                        <!-- <img
                             src="../assets/images/githubHome.png"
                             alt="Custom welcome page, with github octocat and two squirrels."
                             class="welcome-image"
                             v-if="emptyPage && !$route.query.name"
-                        />
+                        /> -->
 
                         <!-- <transition name="slide" mode="out-in"> -->
                         <template v-if="window_type === 'Users'">
@@ -191,6 +191,7 @@ export default {
 
             queryTerm: '',
             searchStatus: 'searching',
+            isWarning: false,
             section_name: 'No User Found',
             window_type: 'Users',
             userList: [],
@@ -682,10 +683,10 @@ label:active::after {
 }
 
 .sync {
-    position: fixed;
-    top: 40%;
-    left: 61.25%;
-    transform: translate(-50%, -50%);
+    // position: fixed;
+    // top: 40%;
+    // left: 61.25%;
+    // transform: translate(-50%, -50%);
     z-index: 2222;
 }
 

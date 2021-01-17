@@ -18,7 +18,8 @@ import {
     faPhoneVolume,
     faMobileAlt,
     faUsers,
-    faCloudDownloadAlt
+    faCloudDownloadAlt,
+    faSyncAlt
 } from '@fortawesome/free-solid-svg-icons'
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
@@ -36,7 +37,8 @@ library.add(
     faMobileAlt,
     faEnvelope,
     faUsers,
-    faCloudDownloadAlt
+    faCloudDownloadAlt,
+    faSyncAlt
 )
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
