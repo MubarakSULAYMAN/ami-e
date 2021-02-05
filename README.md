@@ -29,4 +29,4 @@ npm run lint
 ```
 
 ### Noticed some bugs? 
-Kindly contact contsct me on mubaracksulaymann@gmai.com. You can review [my resume here](https://resume.io/r/UcJYNilaD). Thank you
+Kindly contact contsct me on mubaracksulaymann@gmail.com. You can review [my resume here](https://resume.io/r/UcJYNilaD). Thank you
