@@ -128,7 +128,7 @@ export default {
 
     data() {
         return {
-            window_type: 'UserDetails'
+            window_type: 'UserrrrrDetails'
         }
     },
 
