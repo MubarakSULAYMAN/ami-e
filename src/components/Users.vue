@@ -80,7 +80,6 @@ export default {
             }
 
             value = value.toString()
-            // console.log('value: ', value)
 
             if (value.length > 42) {
                 value = value.slice(0, 40) + '...'
@@ -119,10 +118,7 @@ export default {
                 return 'No number provided.'
             }
 
-            // num = num.toString()
             num = String(num)
-            // num = `${num}`
-            console.log(num)
 
             num.replace(/[- )(]/g, '')
             return num
@@ -138,7 +134,7 @@ export default {
         show_country: {
             type: Boolean,
             required: true,
-        }
+        },
     },
 
     data() {

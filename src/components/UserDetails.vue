@@ -1,12 +1,16 @@
 <template>
     <div class="result-card text-blackl">
         <div class="title" tabindex="99" @click="returnToUsers">
-            <font-awesome-icon :icon="['fas', 'arrow-right']" class="back-arrow mx-2 text-teal3" />
+            <font-awesome-icon
+                :icon="['fas', 'arrow-right']"
+                class="back-arrow mx-2 text-teal3"
+            />
             <span class="results uppercase">Results</span>
-            <!-- <p>{{ present_group }}</p> -->
         </div>
         <div class="user-card flex flex-row w-full h-72 mt-4 rounded-xl">
-            <div class="w-44 flex justify-center md:justify-start items-center md:items-start">
+            <div
+                class="w-44 flex justify-center md:justify-start items-center md:items-start"
+            >
                 <img
                     :src="userInfo.picture.large"
                     :alt="`${userInfo.name.last} ${userInfo.name.first}`"
@@ -16,32 +20,44 @@
             <div class="details">
                 <div class="basic mt-2 p-1">
                     <span class="name">
-                        {{ userInfo.name.last }}
-                        {{ userInfo.name.first }}
-                        <!-- | replaceEmpty('name') -->
+                        {{ userFullName | replaceEmpty('name') }}
                     </span>
-                    <span class="age ml-2">{{ userInfo.dob.age | replaceEmptyAge }} </span>
+                    <span class="age ml-2"
+                        >{{ userInfo.dob.age | replaceEmptyAge }}
+                    </span>
                 </div>
                 <div class="address mt-2 p-1">
-                    {{ userInfo.location.street.number }}
-                    {{ userInfo.location.street.name }}, {{ userInfo.location.city }},
-                    {{ userInfo.location.state }}
-                    <!-- | replaceEmpty('address') -->
+                    {{ userAddress | replaceEmpty('address') }}
                 </div>
                 <div class="email mt-2 px-3 py-1 rounded-2xl bg-gray4">
-                    <font-awesome-icon :icon="['far', 'envelope']" class="mr-2" />
-                    <span class="mail">{{ userInfo.email | replaceEmpty('email') }} </span>
+                    <font-awesome-icon
+                        :icon="['far', 'envelope']"
+                        class="mr-2"
+                    />
+                    <span class="mail"
+                        >{{ userInfo.email | replaceEmpty('email') }}
+                    </span>
                 </div>
                 <div class="date mt-2 px-3 py-1 rounded-2xl bg-pinkl">
                     JOINED: {{ userInfo.registered.date | truncateDate }}
                 </div>
                 <div class="mobile mt-2 p-1">
-                    <font-awesome-icon :icon="['fas', 'phone-volume']" class="mobile-icon mr-2" />
-                    <span class="number">{{ userInfo.phone | replaceEmpty('phone') }} </span>
+                    <font-awesome-icon
+                        :icon="['fas', 'phone-volume']"
+                        class="mobile-icon mr-2"
+                    />
+                    <span class="number"
+                        >{{ userInfo.phone | replaceEmpty('phone') }}
+                    </span>
                 </div>
                 <div class="office mt-2 p-1">
-                    <font-awesome-icon :icon="['fas', 'mobile-alt']" class="mr-2" />
-                    <span class="number">{{ userInfo.cell | replaceEmpty('number') }} </span>
+                    <font-awesome-icon
+                        :icon="['fas', 'mobile-alt']"
+                        class="mr-2"
+                    />
+                    <span class="number"
+                        >{{ userInfo.cell | replaceEmpty('number') }}
+                    </span>
                 </div>
             </div>
         </div>
@@ -87,7 +103,7 @@ export default {
                 value = value.slice(0, 10)
                 return value
             } else return value
-        }
+        },
 
         // formatNum(num) {
         //   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -97,15 +113,26 @@ export default {
     props: {
         userInfo: {
             type: Object,
-            required: true
+            required: true,
         },
     },
 
     methods: {
         returnToUsers() {
             this.$emit('new-window-type')
-        }
-    }
+        },
+    },
+
+    computed: {
+        userFullName() {
+            return `${this.userInfo.name.first} ${this.userInfo.name.last}`
+        },
+
+        userAddress() {
+            let names = `${this.userInfo.location.street.number} ${this.userInfo.location.street.name}, ${this.userInfo.location.city}, ${this.userInfo.location.state}`
+            return names
+        },
+    },
 }
 </script>
 

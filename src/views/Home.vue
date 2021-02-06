@@ -423,66 +423,91 @@ export default {
             this.$route.query.per_page = num
             let page_number = parseInt(this.$route.query.page)
 
-            if (this.section_name === 'User Details') {
-                this.showWarning('Not available for User Details')
+            if (this.section_name !== 'User Details') {
+                if (num >= 5 && num <= 25) {
+                    if (name === '') {
+                        await this.getAllUsers(name, gender, num, page_number)
+                        return
+                    }
+
+                    await this.getUser(name, gender, num, page_number)
+                    return
+                }
+
+                this.showWarning('Value can only be between 5 and 100')
                 return
-            } else if (name === '') {
-                await this.getAllUsers(name, gender, num, page_number)
-                return
-            } else await this.getUser(name, gender, num, page_number)
+            }
+
+            this.showWarning('Not available for User Details')
             return
         },
 
         async previousPage() {
-            if (this.$route.query.page - 1 >= 1) {
-                if (this.section_name === 'User Details') {
-                    this.showWarning('Not available for User Details')
+            if (this.section_name !== 'User Details') {
+                if (this.$route.query.page - 1 >= 1) {
+                    let name = this.$route.query.name
+                    let gender = this.$route.query.gender
+                    let per_page = parseInt(this.$route.query.per_page)
+                    let page_number = parseInt(this.$route.query.page) - 1
+
+                    // console.log(page_number)
+
+                    if (name === '') {
+                        await this.getAllUsers(
+                            name,
+                            gender,
+                            per_page,
+                            page_number,
+                        )
+                        return
+                    }
+
+                    await this.getUser(name, gender, per_page, page_number)
                     return
                 }
 
-                let name = this.$route.query.name
-                let gender = this.$route.query.gender
-                let per_page = parseInt(this.$route.query.per_page)
-                let page_number = parseInt(this.$route.query.page) - 1
-
-                // console.log(page_number)
-
-                if (name === '') {
-                    await this.getAllUsers(name, gender, per_page, page_number)
-                    return
-                }
-
-                await this.getUser(name, gender, per_page, page_number)
+                this.showWarning('I cannot go beyond Page 1')
                 return
             }
 
-            this.showWarning('I cannot go beyond Page 1')
+            this.showWarning('Not available for User Details')
             return
         },
 
         async nextPage() {
-            if (this.$route.query.page + 1 <= 50) {
-                if (this.section_name === 'User Details') {
-                    this.showWarning('Not available for User Details')
+            if (this.section_name !== 'User Details') {
+                // let total_results = 20
+                // let per_page = parseInt(this.$route.query.per_page)
+
+                // let total_pages = Math.round(total_results / per_page)
+                // console.log(total_pages)
+
+                if (this.$route.query.page + 1 <= 50) {
+                    let name = this.$route.query.name
+                    let gender = this.$route.query.gender
+                    let per_page = parseInt(this.$route.query.per_page)
+                    let page_number = parseInt(this.$route.query.page) + 1
+
+                    // console.log(name, gender, per_page, page_number)
+                    if (name === '') {
+                        await this.getAllUsers(
+                            name,
+                            gender,
+                            per_page,
+                            page_number,
+                        )
+                        return
+                    }
+
+                    await this.getUser(name, gender, per_page, page_number)
                     return
                 }
 
-                let name = this.$route.query.name
-                let gender = this.$route.query.gender
-                let per_page = parseInt(this.$route.query.per_page)
-                let page_number = parseInt(this.$route.query.page) + 1
-
-                // console.log(name, gender, per_page, page_number)
-                if (name === '') {
-                    await this.getAllUsers(name, gender, per_page, page_number)
-                    return
-                }
-
-                await this.getUser(name, gender, per_page, page_number)
+                this.showWarning('I cannot go beyond Page 100')
                 return
             }
 
-            this.showWarning('I cannot go beyond Page 50')
+            this.showWarning('Not available for User Details')
             return
         },
     },
