@@ -190,6 +190,7 @@
                         <template v-if="window_type === 'UserDetails'">
                             <user-details
                                 :userInfo="userInfo"
+                                :present_group="section_name"
                                 @new-window-type="changeWindow()"
                             />
                         </template>
@@ -323,11 +324,8 @@ export default {
             // console.log(seed, gender, results, page)
         },
 
-        async getUser(seed, gender, per_page, page) {
-            if (seed) {
-                this.searchStatus = 'searching'
-
-                try {
+        async seeding(seed, gender, per_page, page) {
+            try {
                     let response = await apiRequest.get(
                         `/api/?seed=${seed}&gender=${gender}&results=${per_page}&page=${page}`,
                     )
@@ -364,50 +362,96 @@ export default {
 
                     this.showWarning('Error fetching data. Please try again.')
                 }
+        },
+
+        async getUser(seed, gender, per_page, page) {
+            if (seed) {
+                this.searchStatus = 'searching'
+
+                await this.seeding(seed, gender, per_page, page)
+                // try {
+                //     let response = await apiRequest.get(
+                //         `/api/?seed=${seed}&gender=${gender}&results=${per_page}&page=${page}`,
+                //     )
+
+                //     if ([200, 201].includes(response.status)) {
+                //         let results = response.data.results
+                //         this.searchStatus = 'notSearching'
+
+                //         if (results.length === 0) {
+                //             this.showWarning(
+                //                 `Zero (0) results found for ${seed}.`,
+                //             )
+                //             return
+                //         }
+
+                //         this.window_type = 'Users'
+                //         this.userList = results
+                //         // return
+
+                //         this.$router
+                //             .push({
+                //                 path: '/',
+                //                 query: {
+                //                     name: seed,
+                //                     gender: gender,
+                //                     per_page: per_page,
+                //                     page: page,
+                //                 },
+                //             })
+                //             .catch(() => {})
+                //     }
+                // } catch (e) {
+                //     // console.log(e)
+
+                //     this.showWarning('Error fetching data. Please try again.')
+                // }
                 return
             }
 
             this.showWarning('Please enter a valid name to start a search.')
         },
 
-        async getUserNoName(seed, gender, per_page, page) {
+        async getAllUsers(seed, gender, per_page, page) {
             this.searchStatus = 'searching'
 
-            try {
-                let response = await apiRequest.get(
-                    `/api/?seed=${seed}&gender=${gender}&results=${per_page}&page=${page}`,
-                )
+            await this.seeding(seed, gender, per_page, page)
 
-                if ([200, 201].includes(response.status)) {
-                    let results = response.data.results
-                    this.searchStatus = 'notSearching'
+            // try {
+            //     let response = await apiRequest.get(
+            //         `/api/?seed=${seed}&gender=${gender}&results=${per_page}&page=${page}`,
+            //     )
 
-                    if (results.length === 0) {
-                        this.showWarning(`Zero (0) results found for ${seed}.`)
-                        return
-                    }
+            //     if ([200, 201].includes(response.status)) {
+            //         let results = response.data.results
+            //         this.searchStatus = 'notSearching'
 
-                    this.window_type = 'Users'
-                    this.userList = results
-                    // return
+            //         if (results.length === 0) {
+            //             this.showWarning(`Zero (0) results found for ${seed}.`)
+            //             return
+            //         }
 
-                    this.$router
-                        .push({
-                            path: '/',
-                            query: {
-                                name: seed,
-                                gender: gender,
-                                per_page: per_page,
-                                page: 1,
-                            },
-                        })
-                        .catch(() => {})
-                }
-            } catch (e) {
-                // console.log(e)
+            //         this.window_type = 'Users'
+            //         this.userList = results
+            //         // return
 
-                this.showWarning('Error fetching data. Please try again.')
-            }
+            //         this.$router
+            //             .push({
+            //                 path: '/',
+            //                 query: {
+            //                     name: seed,
+            //                     gender: gender,
+            //                     per_page: per_page,
+            //                     page: 1,
+            //                 },
+            //             })
+            //             .catch(() => {})
+            //     }
+            // } catch (e) {
+            //     // console.log(e)
+
+            //     this.showWarning('Error fetching data. Please try again.')
+            // }
             return
         },
 
@@ -418,17 +462,29 @@ export default {
             let page = this.page_number
             this.section_name = this.cards[userType].title
 
-            await this.getUserNoName(seed, gender, per_page, page)
+            await this.getAllUsers(seed, gender, per_page, page)
         },
 
-        updateVals(qwert) {
+        updateVals(selectedUser) {
             this.window_type = 'UserDetails'
             this.section_name = 'User Details'
-            this.userInfo = qwert
+            this.userInfo = selectedUser
         },
 
         changeWindow() {
             this.window_type = 'Users'
+
+            if (this.$route.query.gender === 'group') {
+                this.section_name = 'All Users'
+            }
+
+            if (this.$route.query.gender === 'male') {
+                this.section_name = 'Male Users'
+            }
+
+            if (this.$route.query.gender === 'female') {
+                this.section_name = 'Female Users'
+            }
         },
 
         showWarning(message) {
@@ -447,7 +503,7 @@ export default {
                 this.showWarning('Not available for User Details')
                 return
             } else if (name === '') {
-                await this.getUserNoName(name, gender, num, page_number)
+                await this.getAllUsers(name, gender, num, page_number)
                 return
             } else await this.getUser(name, gender, num, page_number)
             return
@@ -468,12 +524,7 @@ export default {
                 // console.log(page_number)
 
                 if (name === '') {
-                    await this.getUserNoName(
-                        name,
-                        gender,
-                        per_page,
-                        page_number,
-                    )
+                    await this.getAllUsers(name, gender, per_page, page_number)
                     return
                 }
 
@@ -499,12 +550,7 @@ export default {
 
                 // console.log(name, gender, per_page, page_number)
                 if (name === '') {
-                    await this.getUserNoName(
-                        name,
-                        gender,
-                        per_page,
-                        page_number,
-                    )
+                    await this.getAllUsers(name, gender, per_page, page_number)
                     return
                 }
 

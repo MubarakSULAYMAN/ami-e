@@ -1,6 +1,8 @@
 <template>
     <div>
-        <div class="result-card flex flex-row w-full max-h-48 mt-4 py-2 bg-whiteb rounded-xl">
+        <div
+            class="result-card flex flex-row w-full max-h-48 mt-4 py-2 bg-whiteb rounded-xl"
+        >
             <div class="w-32 flex justify-center items-center">
                 <img
                     :src="user.picture.medium"
@@ -19,10 +21,20 @@
                     {{ user.location.country | replaceEmpty('country') }}
                 </div>
                 <div class="user-contact flex flex-row mt-1">
-                    <font-awesome-icon :icon="['far', 'envelope']" class="contact-icon" />
-                    <div class="user-email">{{ user.email | truncateEmail }}</div>
-                    <font-awesome-icon :icon="['fas', 'phone-volume']" class="contact-icon phone-icon ml-3" />
-                    <div class="user-phone">{{ formattedNum | replaceEmpty('num') }}</div>
+                    <font-awesome-icon
+                        :icon="['far', 'envelope']"
+                        class="contact-icon"
+                    />
+                    <div class="user-email">
+                        {{ user.email | truncateEmail }}
+                    </div>
+                    <font-awesome-icon
+                        :icon="['fas', 'phone-volume']"
+                        class="contact-icon phone-icon ml-3"
+                    />
+                    <div class="user-phone">
+                        {{ formattedNum | replaceEmpty('num') }}
+                    </div>
                 </div>
             </div>
             <div class="nav w-16 md:w-20 flex justify-center items-center">
@@ -30,7 +42,10 @@
                     class="full-details flex justify-center items-center w-8 h-8 rounded-lg bg-teal3"
                     @click="getUserDetails(user)"
                 >
-                    <font-awesome-icon :icon="['fas', 'arrow-right']" class="next-icon text-white" />
+                    <font-awesome-icon
+                        :icon="['fas', 'arrow-right']"
+                        class="next-icon text-white"
+                    />
                 </button>
             </div>
         </div>
@@ -112,23 +127,23 @@ export default {
             num.replace(/[- )(]/g, '')
             return num
             //   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
+        },
     },
 
     props: {
         user: {
             type: Object,
-            required: true
+            required: true,
         },
         show_country: {
             type: Boolean,
-            required: true
+            required: true,
         }
     },
 
     data() {
         return {
-            window_type: 'UserrrrrDetails'
+            // window_type: 'UserDetails',
         }
     },
 
@@ -136,7 +151,7 @@ export default {
         getUserDetails(selected_user) {
             this.userInfo = selected_user
             this.$emit('userN', this.userInfo)
-        }
+        },
     },
 
     computed: {
@@ -152,8 +167,8 @@ export default {
         formattedNum() {
             let num = this.user.phone.toString()
             return num.replace(/[- )(]/g, '')
-        }
-    }
+        },
+    },
 }
 </script>
 

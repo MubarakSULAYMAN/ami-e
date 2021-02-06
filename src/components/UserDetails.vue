@@ -3,6 +3,7 @@
         <div class="title" tabindex="99" @click="returnToUsers">
             <font-awesome-icon :icon="['fas', 'arrow-right']" class="back-arrow mx-2 text-teal3" />
             <span class="results uppercase">Results</span>
+            <!-- <p>{{ present_group }}</p> -->
         </div>
         <div class="user-card flex flex-row w-full h-72 mt-4 rounded-xl">
             <div class="w-44 flex justify-center md:justify-start items-center md:items-start">
@@ -97,7 +98,11 @@ export default {
         userInfo: {
             type: Object,
             required: true
-        }
+        },
+        // present_group: {
+        //     type: String,
+        //     required: false,
+        // },
     },
 
     methods: {
