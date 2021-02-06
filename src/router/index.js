@@ -15,6 +15,11 @@ const routes = [{
         redirect: '/',
         component: Home
     },
+    // {
+    //     path: '/search',
+    //     name: 'Search',
+    //     component: Home
+    // },
     {
         path: '/about',
         name: 'About',

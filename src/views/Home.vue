@@ -1,22 +1,37 @@
 <template>
-    <div class="home grid gap-0 grid-cols-1 md:grid-cols-2 bg-blackl w-full md:w-screen h-full md:h-screen">
+    <div
+        class="home grid gap-0 grid-cols-1 md:grid-cols-2 bg-blackl w-full md:w-screen h-full md:h-screen"
+    >
         <div class="welcome text-white">
             <div class="container p-24 flex flex-col">
-                <p class="welcome-user">Hello, <span class="username">Emerald</span></p>
+                <p class="welcome-user">
+                    Hello, <span class="username">Emerald</span>
+                </p>
 
-                <p class="welcome-msg mt-4 mb-8">Welcome to your dashboard, kindly sort through the user base</p>
+                <p class="welcome-msg mt-4 mb-8">
+                    Welcome to your dashboard, kindly sort through the user base
+                </p>
 
                 <div class="search-user">
-                    <font-awesome-icon :icon="['fas', 'search']" class="search-icon" />
+                    <font-awesome-icon
+                        :icon="['fas', 'search']"
+                        class="search-icon"
+                        @click="queryUser"
+                    />
 
                     <input
                         id="search-user"
                         v-model="queryTerm"
                         type="text"
                         name=""
+                        autocorrect="off"
+                        autocomplete="off"
+                        autofocus
+                        spellcheck="false"
                         placeholder="Find a user"
                         class="search-input bg-gray9 w-full p-4 pr-6 focus:outline-none"
-                        @keyup.enter="getUsers"
+                        @click.prevent
+                        @keyup.enter="queryUser"
                     />
                 </div>
 
@@ -28,14 +43,22 @@
                         :key="index"
                         :tabindex="index"
                         class="card-option mr-8"
-                        @click="getUserGroup(index)"
+                        @click="getUserGroup(index, '')"
                     >
                         <!-- @click="getUserGroup(card.name)" -->
-                        <div class="card flex justify-center items-center rounded-2xl" :class="[card.name, card.color]">
-                            <font-awesome-icon :icon="['fas', card.icon]" size="2x" />
+                        <div
+                            class="card flex justify-center items-center rounded-2xl"
+                            :class="[card.name, card.color]"
+                        >
+                            <font-awesome-icon
+                                :icon="['fas', card.icon]"
+                                size="2x"
+                            />
                         </div>
 
-                        <div class="card-title text-center capitalize mt-4">{{ card.title }}</div>
+                        <div class="card-title text-center capitalize mt-4">
+                            {{ card.title }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -44,45 +67,86 @@
         <div class="w-full h-full p-4 overflow-hidden">
             <div class="bg-gray1 w-full h-full rounded-2xl px-14 py-12">
                 <div class="w-full h-full rounded-2xl font-blackl">
-                    <div class="window-title capitalize">{{ section_name }}</div>
+                    <div class="window-title capitalize">
+                        {{ section_name }}
+                    </div>
 
                     <div class="filter-title capitalize">Filter By</div>
 
                     <div class="filters capitalize">
                         <div class="find-user">
-                            <font-awesome-icon :icon="['fas', 'search']" class="find-icon" />
+                            <font-awesome-icon
+                                :icon="['fas', 'search']"
+                                class="find-icon"
+                            />
 
                             <input
                                 id="search-list"
                                 type="text"
                                 name=""
-                                placeholder="Find a user"
+                                placeholder="Find in list"
                                 class="find-input bg-gray4 p-1 pr-4 focus:outline-none"
                             />
                         </div>
 
                         <span class="inline-block">
-                            <select class="countries bg-gray4 p-1 mx-2 capitalize">
-                                <option>Country</option>
-
-                                <option>Nigeria</option>
+                            <!-- <select
+                class="custom-input bg-white md:font-medium inline-flex items-center"
+                v-model="expense.category_id"
+              >
+                <option class="" disabled value="">
+                  Please select an option
+                </option>
+                <option
+                  class=""
+                  v-for="(item, index) in categories"
+                  :key="index"
+                  :value="item.id"
+                >
+                  {{ item.name }}
+                </option>
+              </select> -->
+                            <select
+                                class="countries bg-gray4 p-1 mx-2 capitalize"
+                            >
+                                <option class="" disabled value="">
+                                    Countries
+                                </option>
+                                <option
+                                    class=""
+                                    v-for="(country, index) in countries"
+                                    :key="index"
+                                    :value="country.alpha2code"
+                                >
+                                    {{ country.name }}
+                                </option>
                             </select>
 
-                            <font-awesome-icon :icon="['fas', 'sort-down']" class="sort"
+                            <font-awesome-icon
+                                :icon="['fas', 'sort-down']"
+                                class="sort"
                         /></span>
 
                         <span>
-                            <input id="switch" type="checkbox" @click="show_country = !show_country" /><label
-                                for="switch"
-                                class="switch"
-                                >Toggle</label
-                            >
+                            <input
+                                id="switch"
+                                type="checkbox"
+                                @click="show_country = !show_country"
+                            /><label for="switch" class="switch">Toggle</label>
 
-                            <span class="ml-1 show text-black">Show Country</span>
+                            <span class="ml-1 show text-black"
+                                >Show Country</span
+                            >
                         </span>
                     </div>
 
-                    <div class="result-window w-full h-96 md:h-2/3 rounded-xl mt-6 overflow-y-auto">
+                    <div
+                        class="result-window w-full h-96 justify-center items-center md:h-2/3 rounded-xl mt-6 overflow-y-auto"
+                    >
+                        <!-- <div
+                            v-if="window_type !== 'Users' || window_type !== 'UserDetails'"
+                            class="extras w-full h-full"
+                        > -->
                         <!-- <img
                             src="../assets/images/github4O4.png"
                             alt="No result found"
@@ -90,14 +154,18 @@
                             v-if="emptyPage && $route.query.name"
                         /> -->
 
-                        <font-awesome-icon
-                            :icon="['fas', 'sync-alt']"
-                            spin
-                            size="10x"
-                            :style="{ color: '#30bbb5' }"
-                            class="sync m-20"
+                        <!-- class="sync" -->
+                        <div
+                            class="w-full h-full flex justify-center items-center"
                             v-if="searchStatus === 'searching'"
-                        />
+                        >
+                            <font-awesome-icon
+                                :icon="['fas', 'sync-alt']"
+                                spin
+                                size="10x"
+                                :style="{ color: '#30bbb5' }"
+                            />
+                        </div>
 
                         <!-- <img
                             src="../assets/images/githubHome.png"
@@ -105,6 +173,7 @@
                             class="welcome-image"
                             v-if="emptyPage && !$route.query.name"
                         /> -->
+                        <!-- </div> -->
 
                         <!-- <transition name="slide" mode="out-in"> -->
                         <template v-if="window_type === 'Users'">
@@ -113,29 +182,60 @@
                                 :key="index"
                                 :user="user"
                                 :show_country="show_country"
-                                @userN="something($event)"
+                                @userN="updateVals($event)"
                             />
                         </template>
                         <!-- </transition>
                         <transition name="slide" mode="in-out"> -->
                         <template v-if="window_type === 'UserDetails'">
-                            <user-details :userInfo="userInfo" @new-window-type="changeWindow()" />
+                            <user-details
+                                :userInfo="userInfo"
+                                @new-window-type="changeWindow()"
+                            />
                         </template>
                         <!-- </transition> -->
                     </div>
 
                     <div class="window-options flex flex-row mt-8">
-                        <div tabindex="7" class="download-results bg-purplel text-white rounded-3xl px-4 py-2">
-                            <font-awesome-icon :icon="['fas', 'cloud-download-alt']" /> Download results
+                        <div
+                            tabindex="7"
+                            class="download-results bg-purplel text-white rounded-3xl px-4 py-2"
+                        >
+                            <font-awesome-icon
+                                :icon="['fas', 'cloud-download-alt']"
+                            />
+                            Download results
                         </div>
 
-                        <div class="navigation flex flex-row items-center ml-auto text-blackl">
-                            <button class="navigate w-8 h-8 rounded-lg bg-gray4">
-                                <font-awesome-icon :icon="['fas', 'angle-left']" />
+                        <div class="pagination ml-auto py-1 flex flex-row">
+                            <input
+                                v-model="per_page"
+                                type="number"
+                                class="paginate w-7 p-1 rounded-lg"
+                                @keyup.enter="changePerPage(val)"
+                            />
+                            <span class="ml-1 py-1">per page</span>
+                        </div>
+
+                        <div
+                            class="navigation flex flex-row items-center ml-auto text-blackl"
+                        >
+                            <button
+                                class="navigate w-8 h-8 rounded-lg bg-gray4"
+                                @click="previousPage"
+                            >
+                                <font-awesome-icon
+                                    :icon="['fas', 'angle-left']"
+                                />
                             </button>
 
-                            <button class="navigate right-arrow w-8 h-8 rounded-lg bg-gray4 ml-2">
-                                <font-awesome-icon :icon="['fas', 'angle-right']" />
+                            <button
+                                class="navigate right-arrow w-8 h-8 rounded-lg bg-gray4 ml-2"
+                                @click="nextPage"
+                            >
+                                <font-awesome-icon
+                                    :icon="['fas', 'angle-right']"
+                                />
                             </button>
                         </div>
                     </div>
@@ -151,11 +251,10 @@
     </div>
 </template>
 
-
-
 <script>
 // import axios from 'axios'
 import apiRequest from '../utils/apiUtils'
+import countries from '../utils/countriesUtils'
 import Users from '@/components/Users'
 import UserDetails from '@/components/UserDetails'
 
@@ -163,7 +262,7 @@ export default {
     name: 'Home',
     components: {
         Users,
-        UserDetails
+        UserDetails,
     },
 
     data() {
@@ -173,55 +272,74 @@ export default {
                     title: 'All Users',
                     name: 'group',
                     color: 'bg-pinkl',
-                    icon: 'users'
+                    icon: 'users',
                 },
                 {
                     title: 'Male Users',
                     name: 'male',
                     color: 'bg-teal3',
-                    icon: 'male'
+                    icon: 'male',
                 },
                 {
                     title: 'Female Users',
                     name: 'female',
                     color: 'bg-purplel',
-                    icon: 'female'
-                }
+                    icon: 'female',
+                },
             ],
 
             queryTerm: '',
+            gender: '',
             searchStatus: 'searching',
             isWarning: false,
+            message: 'An error occured',
             section_name: 'No User Found',
             window_type: 'Users',
             userList: [],
+            countries: countries,
             userInfo: null,
             show_country: false,
-            page_number: 0,
-            size: 10
+            page_number: 1,
+            per_page: 10,
+            size: 10,
         }
     },
 
     computed: {},
 
     created() {
-        return this.getUserGroup(1)
+        return this.getUserGroup(0, 'ami-e')
     },
 
     methods: {
-        async getUsers() {
-            if (this.queryTerm !== '') {
+        async queryUser() {
+            // queryUser() {
+            let seed = this.queryTerm
+            let gender = this.gender
+            let results = this.per_page
+            let page = this.page_number
+
+            await this.getUser(seed, gender, results, page)
+            // console.log(seed, gender, results, page)
+        },
+
+        async getUser(seed, gender, per_page, page) {
+            if (seed) {
                 this.searchStatus = 'searching'
 
                 try {
-                    let response = await apiRequest.get(`/api/?results=10&seed=${this.queryTerm}`)
+                    let response = await apiRequest.get(
+                        `/api/?seed=${seed}&gender=${gender}&results=${per_page}&page=${page}`,
+                    )
 
                     if ([200, 201].includes(response.status)) {
                         let results = response.data.results
                         this.searchStatus = 'notSearching'
 
                         if (results.length === 0) {
-                            this.showWarning(`Zero (0) results found for ${this.queryTerm}.`)
+                            this.showWarning(
+                                `Zero (0) results found for ${seed}.`,
+                            )
                             return
                         }
 
@@ -229,14 +347,17 @@ export default {
                         this.userList = results
                         // return
 
-                        // this.$router.push({
-                        //     path: '/search',
-                        //     query: {
-                        //         name: this.queryTerm,
-                        //         page: 1
-                        //         // queried_on: `${this.modifiedToday}`,
-                        //     }
-                        // })
+                        this.$router
+                            .push({
+                                path: '/',
+                                query: {
+                                    name: seed,
+                                    gender: gender,
+                                    per_page: per_page,
+                                    page: page,
+                                },
+                            })
+                            .catch(() => {})
                     }
                 } catch (e) {
                     // console.log(e)
@@ -249,35 +370,58 @@ export default {
             this.showWarning('Please enter a valid name to start a search.')
         },
 
-        async getUserGroup(userType) {
+        async getUserNoName(seed, gender, per_page, page) {
             this.searchStatus = 'searching'
 
             try {
-                let response = await apiRequest.get(`/api/?results=10&gender=${this.cards[userType].name}`)
-                console.log(this.cards[userType].title)
+                let response = await apiRequest.get(
+                    `/api/?seed=${seed}&gender=${gender}&results=${per_page}&page=${page}`,
+                )
+
                 if ([200, 201].includes(response.status)) {
                     let results = response.data.results
                     this.searchStatus = 'notSearching'
 
                     if (results.length === 0) {
-                        this.showWarning(`Zero (0) results found for ${this.queryTerm}.`)
+                        this.showWarning(`Zero (0) results found for ${seed}.`)
                         return
                     }
 
                     this.window_type = 'Users'
                     this.userList = results
-                    this.section_name = this.cards[userType].title
-                    return
+                    // return
+
+                    this.$router
+                        .push({
+                            path: '/',
+                            query: {
+                                name: seed,
+                                gender: gender,
+                                per_page: per_page,
+                                page: 1,
+                            },
+                        })
+                        .catch(() => {})
                 }
             } catch (e) {
-                console.log(e)
+                // console.log(e)
 
                 this.showWarning('Error fetching data. Please try again.')
             }
             return
         },
 
-        something(qwert) {
+        async getUserGroup(userType, seed_value) {
+            let seed = seed_value
+            let gender = this.cards[userType].name
+            let per_page = this.per_page
+            let page = this.page_number
+            this.section_name = this.cards[userType].title
+
+            await this.getUserNoName(seed, gender, per_page, page)
+        },
+
+        updateVals(qwert) {
             this.window_type = 'UserDetails'
             this.section_name = 'User Details'
             this.userInfo = qwert
@@ -291,8 +435,76 @@ export default {
             this.message = message
             this.isWarning = true
             setTimeout(() => (this.isWarning = false), 5000)
-        }
-    }
+        },
+
+        async changePerPage(num) {
+            let name = this.$route.query.name
+            let gender = this.$route.query.gender
+            this.$route.query.per_page = num
+            let page_number = parseInt(this.$route.query.page)
+
+            if (name === '') {
+                await this.getUserNoName(name, gender, num, page_number)
+                return
+            }
+
+            await this.getUser(name, gender, num, page_number)
+            return
+        },
+
+        async previousPage() {
+            if (this.$route.query.page - 1 >= 1) {
+                let name = this.$route.query.name
+                let gender = this.$route.query.gender
+                let per_page = parseInt(this.$route.query.per_page)
+                let page_number = parseInt(this.$route.query.page) - 1
+
+                // console.log(page_number)
+
+                if (name === '') {
+                    await this.getUserNoName(
+                        name,
+                        gender,
+                        per_page,
+                        page_number,
+                    )
+                    return
+                }
+
+                await this.getUser(name, gender, per_page, page_number)
+                return
+            }
+
+            this.showWarning('I cannot go beyond Page 1')
+            return
+        },
+
+        async nextPage() {
+            if (this.$route.query.page + 1 <= 50) {
+                let name = this.$route.query.name
+                let gender = this.$route.query.gender
+                let per_page = parseInt(this.$route.query.per_page)
+                let page_number = parseInt(this.$route.query.page) + 1
+
+                // console.log(name, gender, per_page, page_number)
+                if (name === '') {
+                    await this.getUserNoName(
+                        name,
+                        gender,
+                        per_page,
+                        page_number,
+                    )
+                    return
+                }
+
+                await this.getUser(name, gender, per_page, page_number)
+                return
+            }
+
+            this.showWarning('I cannot go beyond Page 50')
+            return
+        },
+    },
 }
 </script>
 
@@ -619,12 +831,33 @@ label:active::after {
 .navigate:hover,
 .navigate:focus,
 .navigate:active {
+    z-index: 1;
+    transform: scale(1.1);
+}
+
+.navigate:hover,
+.navigate:focus,
+.navigate:active {
     border: none;
     outline: none;
     color: #ffffff;
     background-color: $blackl;
-    z-index: 1;
-    transform: scale(1.1);
+}
+
+.pagination {
+    font-size: 14px;
+}
+
+.pagination input::-webkit-outer-spin-button,
+.pagination input::-webkit-inner-spin-button {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.pagination input[type='number'] {
+    -moz-appearance: textfield;
 }
 
 .slide-enter {
@@ -682,23 +915,11 @@ label:active::after {
     left: 999px;
 }
 
-.sync {
-    // position: fixed;
-    // top: 40%;
-    // left: 61.25%;
-    // transform: translate(-50%, -50%);
-    z-index: 2222;
-}
-
-@media (max-width: 760px) {
-    .sync {
-        left: 36.25%;
-    }
-}
-
-@media (max-width: 425px) {
-    .sync {
-        left: 30%;
-    }
-}
+// .sync {
+//     position: relative;
+//     top: 30%;
+//     left: 40%;
+//     transform: translate(-50%, -50%);
+//     z-index: 2222;
+// }
 </style>

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="result-card flex flex-row w-full max-h-48 mt-4 bg-whiteb rounded-xl">
+        <div class="result-card flex flex-row w-full max-h-48 mt-4 py-2 bg-whiteb rounded-xl">
             <div class="w-32 flex justify-center items-center">
                 <img
                     :src="user.picture.medium"
@@ -10,15 +10,10 @@
             </div>
             <div class="flex flex-col user-details py-3">
                 <div class="user-name mt-1">
-                    {{ user.name.last }}
-                    {{ user.name.first }}
-                    <!-- | replaceEmpty('name') -->
+                    {{ userFullName | replaceEmpty('name') }}
                 </div>
                 <div class="user-address mt-1">
-                    {{ user.location.street.number }}
-                    {{ user.location.street.name }}, {{ user.location.city }},
-                    {{ user.location.state }}
-                    <!-- | replaceEmpty('address') -->
+                    {{ userAddress | truncateAddress }}
                 </div>
                 <div class="user-country mt-1" v-if="show_country">
                     {{ user.location.country | replaceEmpty('country') }}
@@ -27,7 +22,7 @@
                     <font-awesome-icon :icon="['far', 'envelope']" class="contact-icon" />
                     <div class="user-email">{{ user.email | truncateEmail }}</div>
                     <font-awesome-icon :icon="['fas', 'phone-volume']" class="contact-icon phone-icon ml-3" />
-                    <div class="user-phone">{{ user.phone | replaceEmpty('phone') }}</div>
+                    <div class="user-phone">{{ formattedNum | replaceEmpty('num') }}</div>
                 </div>
             </div>
             <div class="nav w-16 md:w-20 flex justify-center items-center">
@@ -47,13 +42,40 @@ export default {
     filters: {
         replaceEmpty(value, title) {
             if (!value) {
-                return `No ${title} Provided.`
+                return `No ${title} provided.`
+            } else return value
+        },
+
+        truncateName(value) {
+            if (!value) {
+                return 'No name provided.'
+            }
+
+            value = value.toString()
+
+            if (value.length > 25) {
+                value = value.slice(0, 23) + '...'
+                return value
+            } else return value
+        },
+
+        truncateAddress(value) {
+            if (!value) {
+                return 'No address provided.'
+            }
+
+            value = value.toString()
+            // console.log('value: ', value)
+
+            if (value.length > 42) {
+                value = value.slice(0, 40) + '...'
+                return value
             } else return value
         },
 
         truncateEmail(value) {
             if (!value) {
-                return 'No email Provided.'
+                return 'No email provided.'
             }
 
             value = value.toString()
@@ -66,7 +88,7 @@ export default {
 
         truncateBio(value) {
             if (!value) {
-                return 'No Bio Provided'
+                return 'No bio provided.'
             }
 
             value = value.toString()
@@ -75,11 +97,22 @@ export default {
                 value = value.slice(0, 34) + '...'
                 return value
             } else return value
-        }
+        },
 
-        // formatNum(num) {
-        //   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        // },
+        formatNum(num) {
+            if (!num) {
+                return 'No number provided.'
+            }
+
+            // num = num.toString()
+            num = String(num)
+            // num = `${num}`
+            console.log(num)
+
+            num.replace(/[- )(]/g, '')
+            return num
+            //   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
     },
 
     props: {
@@ -101,13 +134,24 @@ export default {
 
     methods: {
         getUserDetails(selected_user) {
-            // console.log(selected_user)
-            // this.window_type = 'UserDetails'
-            // this.section_name = 'User Details'
             this.userInfo = selected_user
             this.$emit('userN', this.userInfo)
-            // this.$emit('userN')
-            // console.log('Hello')
+        }
+    },
+
+    computed: {
+        userFullName() {
+            return `${this.user.name.first} ${this.user.name.last}`
+        },
+
+        userAddress() {
+            let names = `${this.user.location.street.number} ${this.user.location.street.name}, ${this.user.location.city}, ${this.user.location.state}`
+            return names
+        },
+
+        formattedNum() {
+            let num = this.user.phone.toString()
+            return num.replace(/[- )(]/g, '')
         }
     }
 }
