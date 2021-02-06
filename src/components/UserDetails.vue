@@ -99,10 +99,6 @@ export default {
             type: Object,
             required: true
         },
-        // present_group: {
-        //     type: String,
-        //     required: false,
-        // },
     },
 
     methods: {

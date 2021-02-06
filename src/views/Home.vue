@@ -190,7 +190,6 @@
                         <template v-if="window_type === 'UserDetails'">
                             <user-details
                                 :userInfo="userInfo"
-                                :present_group="section_name"
                                 @new-window-type="changeWindow()"
                             />
                         </template>
@@ -213,7 +212,7 @@
                                 v-model="per_page"
                                 type="number"
                                 class="paginate w-7 p-1 rounded-lg"
-                                @keyup.enter="changePerPage(val)"
+                                @keyup.enter="changePerPage(per_page)"
                             />
                             <span class="ml-1 py-1">per page</span>
                         </div>
@@ -326,42 +325,40 @@ export default {
 
         async seeding(seed, gender, per_page, page) {
             try {
-                    let response = await apiRequest.get(
-                        `/api/?seed=${seed}&gender=${gender}&results=${per_page}&page=${page}`,
-                    )
+                let response = await apiRequest.get(
+                    `/api/?seed=${seed}&gender=${gender}&results=${per_page}&page=${page}`,
+                )
 
-                    if ([200, 201].includes(response.status)) {
-                        let results = response.data.results
-                        this.searchStatus = 'notSearching'
+                if ([200, 201].includes(response.status)) {
+                    let results = response.data.results
+                    this.searchStatus = 'notSearching'
 
-                        if (results.length === 0) {
-                            this.showWarning(
-                                `Zero (0) results found for ${seed}.`,
-                            )
-                            return
-                        }
-
-                        this.window_type = 'Users'
-                        this.userList = results
-                        // return
-
-                        this.$router
-                            .push({
-                                path: '/',
-                                query: {
-                                    name: seed,
-                                    gender: gender,
-                                    per_page: per_page,
-                                    page: page,
-                                },
-                            })
-                            .catch(() => {})
+                    if (results.length === 0) {
+                        this.showWarning(`Zero (0) results found for ${seed}.`)
+                        return
                     }
-                } catch (e) {
-                    // console.log(e)
 
-                    this.showWarning('Error fetching data. Please try again.')
+                    this.window_type = 'Users'
+                    this.userList = results
+                    // return
+
+                    this.$router
+                        .push({
+                            path: '/',
+                            query: {
+                                name: seed,
+                                gender: gender,
+                                per_page: per_page,
+                                page: page,
+                            },
+                        })
+                        .catch(() => {})
                 }
+            } catch (e) {
+                // console.log(e)
+
+                this.showWarning('Error fetching data. Please try again.')
+            }
         },
 
         async getUser(seed, gender, per_page, page) {
@@ -369,43 +366,6 @@ export default {
                 this.searchStatus = 'searching'
 
                 await this.seeding(seed, gender, per_page, page)
-                // try {
-                //     let response = await apiRequest.get(
-                //         `/api/?seed=${seed}&gender=${gender}&results=${per_page}&page=${page}`,
-                //     )
-
-                //     if ([200, 201].includes(response.status)) {
-                //         let results = response.data.results
-                //         this.searchStatus = 'notSearching'
-
-                //         if (results.length === 0) {
-                //             this.showWarning(
-                //                 `Zero (0) results found for ${seed}.`,
-                //             )
-                //             return
-                //         }
-
-                //         this.window_type = 'Users'
-                //         this.userList = results
-                //         // return
-
-                //         this.$router
-                //             .push({
-                //                 path: '/',
-                //                 query: {
-                //                     name: seed,
-                //                     gender: gender,
-                //                     per_page: per_page,
-                //                     page: page,
-                //                 },
-                //             })
-                //             .catch(() => {})
-                //     }
-                // } catch (e) {
-                //     // console.log(e)
-
-                //     this.showWarning('Error fetching data. Please try again.')
-                // }
                 return
             }
 
@@ -416,42 +376,6 @@ export default {
             this.searchStatus = 'searching'
 
             await this.seeding(seed, gender, per_page, page)
-
-            // try {
-            //     let response = await apiRequest.get(
-            //         `/api/?seed=${seed}&gender=${gender}&results=${per_page}&page=${page}`,
-            //     )
-
-            //     if ([200, 201].includes(response.status)) {
-            //         let results = response.data.results
-            //         this.searchStatus = 'notSearching'
-
-            //         if (results.length === 0) {
-            //             this.showWarning(`Zero (0) results found for ${seed}.`)
-            //             return
-            //         }
-
-            //         this.window_type = 'Users'
-            //         this.userList = results
-            //         // return
-
-            //         this.$router
-            //             .push({
-            //                 path: '/',
-            //                 query: {
-            //                     name: seed,
-            //                     gender: gender,
-            //                     per_page: per_page,
-            //                     page: 1,
-            //                 },
-            //             })
-            //             .catch(() => {})
-            //     }
-            // } catch (e) {
-            //     // console.log(e)
-
-            //     this.showWarning('Error fetching data. Please try again.')
-            // }
             return
         },
 
