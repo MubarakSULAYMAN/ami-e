@@ -40,10 +40,6 @@ npm run lint
 
 :bow: https://github.com/MubarakSULAYMAN/ami-e
 
-## Noticed some bugs?
-
-Kindly contact me on :email: **mubaracksulaymann@gmail.com**.
-
-You can review :link: **[my resume here](https://resume.io/r/UcJYNilaD)**. :nerd_face:
-
 _Thank you, take care and stay safe._
+### Noticed some bugs? 
+Kindly contact me on :email: **mubaracksulaymann@gmail.com**. You can review **[my resume here](https://resume.io/r/UcJYNilaD)**. :nerd_face:. Thank you
