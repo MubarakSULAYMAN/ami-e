@@ -3,12 +3,12 @@
         class="home grid gap-0 grid-cols-1 md:grid-cols-2 bg-blackl w-full md:w-screen h-full md:h-screen"
     >
         <div class="welcome text-white">
-            <div class="container p-24 flex flex-col">
+            <div class="container p-12 md:p-24 flex flex-col">
                 <p class="welcome-user">
                     Hello, <span class="username">Emerald</span>
                 </p>
 
-                <p class="welcome-msg mt-4 mb-8">
+                <p class="welcome-msg mt-2 md:mt-4 mb-4 md:mb-8">
                     Welcome to your dashboard, kindly sort through the user base
                 </p>
 
@@ -29,25 +29,27 @@
                         autofocus
                         spellcheck="false"
                         placeholder="Find a user"
-                        class="search-input bg-gray9 w-full p-4 pr-6 focus:outline-none"
+                        class="search-input bg-gray9 w-full p-2 md:p-4 pr-3 md:pr-6 focus:outline-none"
                         @click.prevent
                         @keyup.enter="queryUser"
                     />
                 </div>
 
-                <div class="title capitalize mt-16 mb-10">show users</div>
+                <div class="title capitalize mt-8 md:mt-16 mb-5 md:mb-10">
+                    show users
+                </div>
 
                 <div class="flex flex-row">
                     <div
                         v-for="(card, index) in cards"
                         :key="index"
                         :tabindex="index"
-                        class="card-option mr-8"
+                        class="card-option mr-4 md:mr-8"
                         @click="getUserGroup(index, '')"
                     >
                         <!-- @click="getUserGroup(card.name)" -->
                         <div
-                            class="card flex justify-center items-center rounded-2xl"
+                            class="card flex justify-center items-center rounded-lg md:rounded-2xl"
                             :class="[card.name, card.color]"
                         >
                             <font-awesome-icon
@@ -56,7 +58,9 @@
                             />
                         </div>
 
-                        <div class="card-title text-center capitalize mt-4">
+                        <div
+                            class="card-title text-center capitalize mt-2 md:mt-4"
+                        >
                             {{ card.title }}
                         </div>
                     </div>
@@ -64,9 +68,13 @@
             </div>
         </div>
 
-        <div class="w-full h-full p-4 overflow-hidden">
-            <div class="bg-gray1 w-full h-full rounded-2xl px-14 py-12">
-                <div class="w-full h-full rounded-2xl font-blackl">
+        <div
+            class="h-screen md:h-full p-2 md:p-4 overflow-hidden"
+        >
+            <div
+                class="bg-gray1 h-full rounded-lg md:rounded-2xl px-4 md:px-7 lg:px-14 py-6 md:py-12"
+            >
+                <div class="h-full rounded-lg md:rounded-2xl font-blackl">
                     <div class="window-title capitalize">
                         {{ section_name }}
                     </div>
@@ -89,25 +97,10 @@
                             />
                         </div>
 
-                        <span class="inline-block">
-                            <!-- <select
-                class="custom-input bg-white md:font-medium inline-flex items-center"
-                v-model="expense.category_id"
-              >
-                <option class="" disabled value="">
-                  Please select an option
-                </option>
-                <option
-                  class=""
-                  v-for="(item, index) in categories"
-                  :key="index"
-                  :value="item.id"
-                >
-                  {{ item.name }}
-                </option>
-              </select> -->
+                        <span class="inline-block mt-2 md:mt-0">
                             <select
-                                class="countries bg-gray4 p-1 mx-2 capitalize"
+                                class="countries bg-gray4 p-1 mx-0 md:mx-2 capitalize"
+                                v-model="country_name"
                             >
                                 <option class="" disabled value="">
                                     Countries
@@ -141,20 +134,8 @@
                     </div>
 
                     <div
-                        class="result-window w-full h-96 justify-center items-center md:h-2/3 rounded-xl mt-6 overflow-y-auto"
+                        class="result-window w-full h-1/2 md:h-3/4 justify-center items-center rounded-xl mt-3 md:mt-6 overflow-y-auto"
                     >
-                        <!-- <div
-                            v-if="window_type !== 'Users' || window_type !== 'UserDetails'"
-                            class="extras w-full h-full"
-                        > -->
-                        <!-- <img
-                            src="../assets/images/github4O4.png"
-                            alt="No result found"
-                            class="no-result"
-                            v-if="emptyPage && $route.query.name"
-                        /> -->
-
-                        <!-- class="sync" -->
                         <div
                             class="w-full h-full flex justify-center items-center"
                             v-if="searchStatus === 'searching'"
@@ -167,15 +148,6 @@
                             />
                         </div>
 
-                        <!-- <img
-                            src="../assets/images/githubHome.png"
-                            alt="Custom welcome page, with github octocat and two squirrels."
-                            class="welcome-image"
-                            v-if="emptyPage && !$route.query.name"
-                        /> -->
-                        <!-- </div> -->
-
-                        <!-- <transition name="slide" mode="out-in"> -->
                         <template v-if="window_type === 'Users'">
                             <users
                                 v-for="(user, index) in userList"
@@ -185,21 +157,19 @@
                                 @userN="updateVals($event)"
                             />
                         </template>
-                        <!-- </transition>
-                        <transition name="slide" mode="in-out"> -->
+
                         <template v-if="window_type === 'UserDetails'">
                             <user-details
                                 :userInfo="userInfo"
                                 @new-window-type="changeWindow()"
                             />
                         </template>
-                        <!-- </transition> -->
                     </div>
 
-                    <div class="window-options flex flex-row mt-8">
+                    <div class="window-options flex flex-row mt-2 md:mt-4">
                         <div
                             tabindex="7"
-                            class="download-results bg-purplel text-white rounded-3xl px-4 py-2"
+                            class="download-results bg-purplel text-white rounded-xl md:rounded-3xl px-2 md:px-4 py-1 md:py-2"
                         >
                             <font-awesome-icon
                                 :icon="['fas', 'cloud-download-alt']"
@@ -211,7 +181,7 @@
                             <input
                                 v-model="per_page"
                                 type="number"
-                                class="paginate w-7 p-1 rounded-lg"
+                                class="paginate w-7 p-1 rounded md:rounded-lg"
                                 @keyup.enter="changePerPage(per_page)"
                             />
                             <span class="ml-1 py-1">per page</span>
@@ -297,6 +267,7 @@ export default {
             window_type: 'Users',
             userList: [],
             countries: countries,
+            country_name: '',
             userInfo: null,
             show_country: false,
             page_number: 1,
@@ -320,7 +291,6 @@ export default {
             let page = this.page_number
 
             await this.getUser(seed, gender, results, page)
-            // console.log(seed, gender, results, page)
         },
 
         async seeding(seed, gender, per_page, page) {
@@ -450,8 +420,6 @@ export default {
                     let per_page = parseInt(this.$route.query.per_page)
                     let page_number = parseInt(this.$route.query.page) - 1
 
-                    // console.log(page_number)
-
                     if (name === '') {
                         await this.getAllUsers(
                             name,
@@ -488,7 +456,6 @@ export default {
                     let per_page = parseInt(this.$route.query.per_page)
                     let page_number = parseInt(this.$route.query.page) + 1
 
-                    // console.log(name, gender, per_page, page_number)
                     if (name === '') {
                         await this.getAllUsers(
                             name,
@@ -569,17 +536,13 @@ $gray9: #3c3f54;
 
 .search-icon {
     position: absolute;
-
     top: 19px;
-
     left: 19px;
 }
 
 .search-input {
     padding-left: 50px;
-
     border-radius: 30px;
-
     font-size: 14px;
 }
 
@@ -664,15 +627,10 @@ $gray9: #3c3f54;
 
 .find-input {
     width: 260px;
-
     padding-left: 30px;
-
     border-radius: 15px;
-
     font-size: 14px;
-
     font-weight: 400;
-
     color: $blackl;
 }
 
@@ -702,17 +660,11 @@ select.countries::-ms-expand {
 
 .countries {
     width: 130px;
-
     padding-right: 20px;
-
     padding-left: 10px;
-
     border-radius: 15px;
-
     font-size: 14px;
-
     font-weight: 400;
-
     color: $blackl;
 }
 
@@ -928,4 +880,30 @@ label:active::after {
 //     transform: translate(-50%, -50%);
 //     z-index: 2222;
 // }
+
+@media screen and (max-width: 468px) {
+    .search-icon {
+        top: 10px;
+    }
+
+    .find-input {
+        width: 100%;
+    }
+
+    .search-icon {
+    // position: absolute;
+    // top: 19px;
+    left: 15px;
+}
+
+    .search-input {
+    padding-left: 40px;
+    // border-radius: 30px;
+    // font-size: 14px;
+}
+
+    .sort {
+        transform: translate(-25px, -2px);
+    }
+}
 </style>

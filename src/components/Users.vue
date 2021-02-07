@@ -1,16 +1,20 @@
 <template>
     <div>
         <div
-            class="result-card flex flex-row w-full max-h-48 mt-4 py-2 bg-whiteb rounded-xl"
+            class="result-card relative flex flex-row flex-wrap md:flex-nowrap w-full max-h-48 mt-4 py-2 bg-whiteb rounded-xl"
         >
-            <div class="w-32 flex justify-center items-center">
+            <div
+                class="w-full -ml-3 md:ml-0 md:w-32 flex justify-center items-center"
+            >
                 <img
                     :src="user.picture.medium"
                     :alt="`${user.name.last} ${user.name.first}`"
                     class="user-image h-20 w-20 rounded-full"
                 />
             </div>
-            <div class="flex flex-col user-details py-3">
+            <div
+                class="w-32 flex flex-col user-details py-3 text-center md:text-left"
+            >
                 <div class="user-name mt-1">
                     {{ userFullName | replaceEmpty('name') }}
                 </div>
@@ -20,7 +24,9 @@
                 <div class="user-country mt-1" v-if="show_country">
                     {{ user.location.country | replaceEmpty('country') }}
                 </div>
-                <div class="user-contact flex flex-row mt-1">
+                <div
+                    class="user-contact flex flex-row mx-auto md:mx-0 mt-1"
+                >
                     <font-awesome-icon
                         :icon="['far', 'envelope']"
                         class="contact-icon"
@@ -241,5 +247,13 @@ $teal2: #75d6d1;
     z-index: 1.1;
     cursor: default;
     transform: scale(1.1);
+}
+
+@media screen and (max-width: 468px) {
+    .nav {
+        position: absolute;
+        top: 40%;
+        right: 0;
+    }
 }
 </style>

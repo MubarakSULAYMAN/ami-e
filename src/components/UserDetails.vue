@@ -7,9 +7,11 @@
             />
             <span class="results uppercase">Results</span>
         </div>
-        <div class="user-card flex flex-row w-full h-72 mt-4 rounded-xl">
+        <div
+            class="user-card flex flex-row flex-wrap md:flex-nowrap w-full h-72 mt-4 rounded-xl"
+        >
             <div
-                class="w-44 flex justify-center md:justify-start items-center md:items-start"
+                class="w-44 mx-auto md:mx-0 flex justify-center md:justify-start items-center md:items-start"
             >
                 <img
                     :src="userInfo.picture.large"
@@ -17,7 +19,7 @@
                     class="image h-40 w-40 rounded-full"
                 />
             </div>
-            <div class="details">
+            <div class="details text-center md:text-left">
                 <div class="basic mt-2 p-1">
                     <span class="name">
                         {{ userFullName | replaceEmpty('name') }}
@@ -29,7 +31,7 @@
                 <div class="address mt-2 p-1">
                     {{ userAddress | replaceEmpty('address') }}
                 </div>
-                <div class="email mt-2 px-3 py-1 rounded-2xl bg-gray4">
+                <div class="email mt-2 mx-auto md:mx-0 px-3 py-1 rounded-2xl bg-gray4">
                     <font-awesome-icon
                         :icon="['far', 'envelope']"
                         class="mr-2"
@@ -38,7 +40,9 @@
                         >{{ userInfo.email | replaceEmpty('email') }}
                     </span>
                 </div>
-                <div class="date mt-2 px-3 py-1 rounded-2xl bg-pinkl">
+                <div
+                    class="date mt-2 mx-auto md:mx-0 px-3 py-1 rounded-2xl bg-pinkl"
+                >
                     JOINED: {{ userInfo.registered.date | truncateDate }}
                 </div>
                 <div class="mobile mt-2 p-1">
