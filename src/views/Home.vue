@@ -134,7 +134,7 @@
                     </div>
 
                     <div
-                        class="result-window w-full h-5/6 md:h-3/4 justify-center items-center rounded-xl mt-3 md:mt-6 overflow-y-auto"
+                        class="result-window w-full h-4/5 md:h-3/4 justify-center items-center rounded-xl mt-3 md:mt-6 overflow-y-auto"
                     >
                         <div
                             class="w-full h-full flex justify-center items-center"
