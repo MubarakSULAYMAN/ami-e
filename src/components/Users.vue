@@ -1,10 +1,10 @@
 <template>
     <div>
         <div
-            class="result-card relative flex flex-row flex-wrap md:flex-nowrap w-full max-h-48 mt-4 py-2 bg-whiteb rounded-xl"
+            class="result-card relative flex flex-row flex-wrap md:flex-nowrap w-full max-h-56 md:max-h-48 mt-4 py-2 bg-whiteb rounded-xl"
         >
             <div
-                class="w-full md:ml-0 md:w-32 flex justify-center items-center border border-red-700"
+                class="w-full md:ml-0 md:w-32 flex justify-center items-center"
             >
                 <img
                     :src="user.picture.medium"
@@ -13,7 +13,7 @@
                 />
             </div>
             <div
-                class="w-full md:w-32 flex flex-col user-details mx-auto md:mx-0 py-3 text-center md:text-left border border-red-700"
+                class="w-full md:w-32 flex flex-col user-details mx-auto md:mx-0 py-3 text-center md:text-left"
             >
                 <div class="user-name mt-1">
                     {{ userFullName | replaceEmpty('name') }}
