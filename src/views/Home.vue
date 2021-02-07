@@ -68,9 +68,7 @@
             </div>
         </div>
 
-        <div
-            class="h-screen md:h-full p-2 md:p-4 overflow-hidden"
-        >
+        <div class="h-screen md:h-full p-2 md:p-4 overflow-hidden">
             <div
                 class="bg-gray1 h-full rounded-lg md:rounded-2xl px-7 md:px-14 py-6 md:py-12"
             >
@@ -99,14 +97,13 @@
 
                         <span class="inline-block mt-2 md:mt-0">
                             <select
-                                class="countries bg-gray4 p-1 mx-0 md:mx-2 capitalize"
                                 v-model="country_name"
+                                class="countries bg-gray4 p-1 mx-0 md:mx-2 capitalize"
                             >
                                 <option class="" disabled value="">
                                     Countries
                                 </option>
                                 <option
-                                    class=""
                                     v-for="(country, index) in countries"
                                     :key="index"
                                     :value="country.alpha2code"
@@ -137,8 +134,8 @@
                         class="result-window w-full h-4/5 md:h-3/4 justify-center items-center rounded-xl mt-3 md:mt-6 overflow-y-auto"
                     >
                         <div
-                            class="w-full h-full flex justify-center items-center"
                             v-if="searchStatus === 'searching'"
+                            class="w-full h-full flex justify-center items-center"
                         >
                             <font-awesome-icon
                                 :icon="['fas', 'sync-alt']"
@@ -153,23 +150,23 @@
                                 v-for="(user, index) in userList"
                                 :key="index"
                                 :user="user"
-                                :show_country="show_country"
+                                :show-country="show_country"
                                 @userN="updateVals($event)"
                             />
                         </template>
 
                         <template v-if="window_type === 'UserDetails'">
                             <user-details
-                                :userInfo="userInfo"
+                                :user-info="userInfo"
                                 @new-window-type="changeWindow()"
                             />
                         </template>
                     </div>
 
-                    <div class="window-options flex flex-row mt-2 md:mt-4">
+                    <div class="window-options flex flex-row mt-3 md:mt-4">
                         <div
                             tabindex="7"
-                            class="download-results bg-purplel text-white rounded-xl md:rounded-3xl px-2 md:px-4 py-1 md:py-2"
+                            class="download-results bg-purplel text-white text-center rounded-3xl px-4 py-2"
                         >
                             <font-awesome-icon
                                 :icon="['fas', 'cloud-download-alt']"
@@ -214,7 +211,7 @@
         </div>
 
         <transition name="fly">
-            <div class="warning" v-if="isWarning">
+            <div v-if="isWarning" class="warning">
                 <p>{{ message }}</p>
             </div>
         </transition>
@@ -481,26 +478,18 @@ export default {
 }
 </script>
 
-
-
 <style lang="scss" scoped>
 $teal2: #75d6d1;
-
 $teal3: #30bbb5;
-
 $blackl: #262a41;
-
 $gray7: #babdd1;
-
 $gray9: #3c3f54;
 
 *,
 *::before,
 *::after {
     margin: 0;
-
     padding: 0;
-
     box-sizing: border-box;
 }
 
@@ -510,24 +499,16 @@ $gray9: #3c3f54;
 
 .welcome-user {
     font-weight: 200;
-
     font-size: 38px;
-
-    // font-size: 49px;
 }
 
 .username {
     font-weight: 700;
-
-    // font-size: 37px;
 }
 
 .welcome-msg {
     font-weight: 200;
-
     font-size: 12px;
-
-    // margin: 10px 0 30px 0;
 }
 
 .search-user {
@@ -546,16 +527,6 @@ $gray9: #3c3f54;
     font-size: 14px;
 }
 
-// .search-input:hover .search-icon,
-
-// .search-input:focus .search-icon,
-
-// .search-input:active .search-icon {
-
-//     display: none;
-
-// }
-
 .search-input::placeholder {
     color: #ffffff;
 }
@@ -566,40 +537,33 @@ $gray9: #3c3f54;
 
 .title {
     font-weight: 300;
-
     font-size: 14px;
 }
 
 .card-option {
     z-index: 1;
-
     transition: all 0.5s;
 }
 
 .card-option:hover,
 .card-option:focus {
     border: none;
-
     outline: none;
-
     transform: scale(1.1);
 }
 
 .card {
     width: 80px;
-
     height: 80px;
 }
 
 .card-title {
     font-size: 12px;
-
     font-weight: 400;
 }
 
 .window-title {
     font-size: 30px;
-
     font-weight: 700;
 }
 
@@ -609,19 +573,13 @@ $gray9: #3c3f54;
 
 .find-user {
     position: relative;
-
     display: inline-block;
-
-    // margin-right: 10px;
 }
 
 .find-icon {
     position: absolute;
-
     top: 7px;
-
     left: 8px;
-
     color: $gray7;
 }
 
@@ -643,14 +601,10 @@ $gray9: #3c3f54;
 }
 
 // cross-check
-
 select.countries {
     -moz-appearance: none;
-
     -webkit-appearance: none;
-
     text-indent: 0.01px;
-
     text-overflow: '';
 }
 
@@ -670,63 +624,42 @@ select.countries::-ms-expand {
 
 .countries:focus {
     border: none;
-
     outline: none;
 }
 
 .sort {
     position: relative;
-
     transform: translate(-22px, -2px);
 }
 
 // cross-check
-
 input[type='checkbox'] {
     height: 0;
-
     width: 0;
-
     visibility: hidden;
 }
 
 label.switch {
     position: relative;
-
     width: 25px;
-
     height: 12.5px;
-
     display: inline-block;
-
     border-radius: 12.5px;
-
     background: grey;
-
     cursor: pointer;
-
     text-indent: -9999px;
-
     transform: translateY(6px);
 }
 
 label.switch::after {
     content: '';
-
     position: absolute;
-
     top: 0.56px;
-
     left: 0.56px;
-
     width: 11.25px;
-
     height: 11.25px;
-
     background: #fff;
-
     border-radius: 11.25px;
-
     transition: 0.3s;
 }
 
@@ -736,7 +669,6 @@ input:checked + label.switch {
 
 input:checked + label.switch::after {
     left: calc(100% - 1.25px);
-
     transform: translateX(-100%);
 }
 
@@ -746,10 +678,7 @@ label:active::after {
 
 .show {
     font-size: 10px;
-
     font-weight: 500;
-
-    // padding-bottom: 2px;
 }
 
 .result-window::-webkit-scrollbar {
@@ -758,7 +687,6 @@ label:active::after {
 
 .result-window {
     -ms-overflow-style: none;
-
     scrollbar-width: none;
 }
 
@@ -848,6 +776,7 @@ label:active::after {
     transition: all 0.5s;
     z-index: 1111;
 }
+
 .fly-enter,
 .fly-leave-to {
     transform: scaleY(0);
@@ -855,31 +784,21 @@ label:active::after {
     bottom: -999px;
     left: -999px;
 }
+
 .warning:hover {
     transform: translate(4px, 4px);
     box-shadow: none;
 }
-/* .warning .active {
-    position: fixed;
-    top: 999px;
-    right: -999px;
-  } */
+
 .warning p {
     margin: 0;
 }
+
 .warning p .active {
     position: fixed;
     bottom: -999px;
     left: 999px;
 }
-
-// .sync {
-//     position: relative;
-//     top: 30%;
-//     left: 40%;
-//     transform: translate(-50%, -50%);
-//     z-index: 2222;
-// }
 
 @media screen and (max-width: 468px) {
     .search-icon {
@@ -891,16 +810,12 @@ label:active::after {
     }
 
     .search-icon {
-    // position: absolute;
-    // top: 19px;
-    left: 15px;
-}
+        left: 15px;
+    }
 
     .search-input {
-    padding-left: 40px;
-    // border-radius: 30px;
-    // font-size: 14px;
-}
+        padding-left: 40px;
+    }
 
     .sort {
         transform: translate(-25px, -2px);

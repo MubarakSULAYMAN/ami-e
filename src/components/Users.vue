@@ -21,7 +21,7 @@
                 <div class="user-address mt-1">
                     {{ userAddress | truncateAddress }}
                 </div>
-                <div class="user-country mt-1" v-if="show_country">
+                <div v-if="showCountry" class="user-country mt-1">
                     {{ user.location.country | replaceEmpty('country') }}
                 </div>
 
@@ -136,22 +136,9 @@ export default {
             type: Object,
             required: true,
         },
-        show_country: {
+        showCountry: {
             type: Boolean,
             required: true,
-        },
-    },
-
-    data() {
-        return {
-            // window_type: 'UserDetails',
-        }
-    },
-
-    methods: {
-        getUserDetails(selected_user) {
-            this.userInfo = selected_user
-            this.$emit('userN', this.userInfo)
         },
     },
 
@@ -170,15 +157,18 @@ export default {
             return num.replace(/[- )(]/g, '')
         },
     },
+
+    methods: {
+        getUserDetails(selected_user) {
+            this.userInfo = selected_user
+            this.$emit('userN', this.userInfo)
+        },
+    },
 }
 </script>
 
 <style lang="scss" scoped>
 $teal2: #75d6d1;
-// $teal3: #30bbb5;
-// $blackl: #262a41;
-// $gray7: #babdd1;
-// $gray9: #3c3f54;
 
 *,
 *::before,
@@ -197,27 +187,26 @@ $teal2: #75d6d1;
         object-fit: contain;
         border: 5px solid $teal2;
     }
+
     &-details {
         width: 19rem;
     }
+
     &-name {
         font-size: 16px;
         font-weight: 600;
     }
+
     &-address,
     &-country {
-        // margin: 5px 0;
         font-size: 12px;
         font-weight: 400;
         font-style: italic;
     }
+
     &-contact {
         font-size: 12px;
         font-weight: 300;
-    }
-    &email {
-    }
-    &phone {
     }
 }
 

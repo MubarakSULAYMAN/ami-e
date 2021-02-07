@@ -7,12 +7,11 @@
             />
             <span class="results uppercase">Results</span>
         </div>
+
         <div
             class="user-card flex flex-row flex-wrap md:flex-nowrap w-full h-full md:h-72 mt-4 rounded-xl"
         >
-            <div
-                class="w-44 mx-auto md:mx-0 flex justify-center items-center"
-            >
+            <div class="w-44 mx-auto md:mx-0 flex justify-center items-center">
                 <img
                     :src="userInfo.picture.large"
                     :alt="`${userInfo.name.last} ${userInfo.name.first}`"
@@ -31,7 +30,9 @@
                 <div class="address mt-2 mx-auto md:mx-0 p-1">
                     {{ userAddress | replaceEmpty('address') }}
                 </div>
-                <div class="email mt-2 mx-auto md:mx-0 px-3 py-1 rounded-2xl bg-gray4">
+                <div
+                    class="email mt-2 mx-auto md:mx-0 px-3 py-1 rounded-2xl bg-gray4"
+                >
                     <font-awesome-icon
                         :icon="['far', 'envelope']"
                         class="mr-2"
@@ -121,12 +122,6 @@ export default {
         },
     },
 
-    methods: {
-        returnToUsers() {
-            this.$emit('new-window-type')
-        },
-    },
-
     computed: {
         userFullName() {
             return `${this.userInfo.name.first} ${this.userInfo.name.last}`
@@ -135,6 +130,12 @@ export default {
         userAddress() {
             let names = `${this.userInfo.location.street.number} ${this.userInfo.location.street.name}, ${this.userInfo.location.city}, ${this.userInfo.location.state}`
             return names
+        },
+    },
+
+    methods: {
+        returnToUsers() {
+            this.$emit('new-window-type')
         },
     },
 }
@@ -147,11 +148,7 @@ $teal2: #75d6d1;
     cursor: default;
 }
 
-.title:hover .back-arrow {
-    transition: all 0.5s;
-}
-
-.title:hover .back-arrow {
+.title .back-arrow {
     transform: rotate(-180deg);
 }
 
@@ -167,7 +164,6 @@ $teal2: #75d6d1;
 }
 
 .image {
-    // object-fit: contain;
     border: 5px solid $teal2;
 }
 
@@ -184,7 +180,6 @@ $teal2: #75d6d1;
 }
 
 .age {
-    // margin-left: 20px;
     font-weight: 200;
 }
 
