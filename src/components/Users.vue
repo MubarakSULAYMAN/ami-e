@@ -4,7 +4,7 @@
             class="result-card relative flex flex-row flex-wrap md:flex-nowrap w-full max-h-48 mt-4 py-2 bg-whiteb rounded-xl"
         >
             <div
-                class="w-full -ml-3 md:ml-0 md:w-32 flex justify-center items-center"
+                class="w-full md:ml-0 md:w-32 flex justify-center items-center border border-red-700"
             >
                 <img
                     :src="user.picture.medium"
@@ -13,7 +13,7 @@
                 />
             </div>
             <div
-                class="w-32 flex flex-col user-details py-3 text-center md:text-left"
+                class="w-full md:w-32 flex flex-col user-details mx-auto md:mx-0 py-3 text-center md:text-left border border-red-700"
             >
                 <div class="user-name mt-1">
                     {{ userFullName | replaceEmpty('name') }}
@@ -24,9 +24,8 @@
                 <div class="user-country mt-1" v-if="show_country">
                     {{ user.location.country | replaceEmpty('country') }}
                 </div>
-                <div
-                    class="user-contact flex flex-row mx-auto md:mx-0 mt-1"
-                >
+
+                <div class="user-contact flex flex-row mx-auto md:mx-0 mt-1">
                     <font-awesome-icon
                         :icon="['far', 'envelope']"
                         class="contact-icon"

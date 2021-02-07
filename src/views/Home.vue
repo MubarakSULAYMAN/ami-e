@@ -72,7 +72,7 @@
             class="h-screen md:h-full p-2 md:p-4 overflow-hidden"
         >
             <div
-                class="bg-gray1 h-full rounded-lg md:rounded-2xl px-4 md:px-7 lg:px-14 py-6 md:py-12"
+                class="bg-gray1 h-full rounded-lg md:rounded-2xl px-7 md:px-14 py-6 md:py-12"
             >
                 <div class="h-full rounded-lg md:rounded-2xl font-blackl">
                     <div class="window-title capitalize">
@@ -134,7 +134,7 @@
                     </div>
 
                     <div
-                        class="result-window w-full h-1/2 md:h-3/4 justify-center items-center rounded-xl mt-3 md:mt-6 overflow-y-auto"
+                        class="result-window w-full h-5/6 md:h-3/4 justify-center items-center rounded-xl mt-3 md:mt-6 overflow-y-auto"
                     >
                         <div
                             class="w-full h-full flex justify-center items-center"
