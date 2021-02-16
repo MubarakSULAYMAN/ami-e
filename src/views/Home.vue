@@ -88,8 +88,8 @@
 
                             <input
                                 id="search-list"
+                                v-model="filter_term"
                                 type="text"
-                                name=""
                                 placeholder="Find in list"
                                 class="find-input bg-gray4 p-1 pr-4 focus:outline-none"
                             />
@@ -99,6 +99,7 @@
                             <select
                                 v-model="country_name"
                                 class="countries bg-gray4 p-1 mx-0 md:mx-2 capitalize"
+                                @click="checkVal(country_name)"
                             >
                                 <option class="" disabled value="">
                                     Countries
@@ -106,7 +107,7 @@
                                 <option
                                     v-for="(country, index) in countries"
                                     :key="index"
-                                    :value="country.alpha2code"
+                                    :value="country.name"
                                 >
                                     {{ country.name }}
                                 </option>
@@ -135,7 +136,7 @@
                     >
                         <div
                             v-if="searchStatus === 'searching'"
-                            class="w-full h-full flex justify-center items-center"
+                            class="spinner w-full h-full flex justify-center items-center"
                         >
                             <font-awesome-icon
                                 :icon="['fas', 'sync-alt']"
@@ -147,7 +148,7 @@
 
                         <template v-if="window_type === 'Users'">
                             <users
-                                v-for="(user, index) in userList"
+                                v-for="(user, index) in reFilteredList"
                                 :key="index"
                                 :user="user"
                                 :show-country="show_country"
@@ -167,6 +168,7 @@
                         <div
                             tabindex="7"
                             class="download-results bg-purplel text-white text-center rounded-3xl px-4 py-2"
+                            @click="downloadCSVExport(reFilteredList)"
                         >
                             <font-awesome-icon
                                 :icon="['fas', 'cloud-download-alt']"
@@ -255,6 +257,7 @@ export default {
                 },
             ],
 
+            filter_term: '',
             queryTerm: '',
             gender: '',
             searchStatus: 'searching',
@@ -273,7 +276,27 @@ export default {
         }
     },
 
-    computed: {},
+    computed: {
+        filteredList() {
+            return this.userList.filter((user) => {
+                return `${user.name.first} ${user.name.last}`
+                    .toLowerCase()
+                    .includes(this.filter_term.toLowerCase())
+            })
+        },
+
+        reFilteredList() {
+            return this.filteredList.filter((user) => {
+                return user.location.country
+                    .toLowerCase()
+                    .includes(this.country_name.toLowerCase())
+            })
+        },
+
+        dateTimeStamp() {
+            return new Date().toLocaleString().replace(/[\s/,:]/g, '')
+        },
+    },
 
     created() {
         return this.getUserGroup(0, 'ami-e')
@@ -307,6 +330,7 @@ export default {
 
                     this.window_type = 'Users'
                     this.userList = results
+                    // console.log(this.userList)
                     // return
 
                     this.$router
@@ -473,6 +497,31 @@ export default {
 
             this.showWarning('Not available for User Details')
             return
+        },
+
+        downloadCSVExport(printData) {
+            if (this.reFilteredList) {
+                let csvContent = 'data:text/csv;charset=utf-8,'
+                csvContent += [
+                    Object.keys(printData[0]).join(';'),
+                    ...printData.map(
+                        (item) => Object.values(item).join(';'),
+                        // (item) => Object.values(item).name.first.join(';'),
+                    ),
+                ]
+                    .join('\n')
+                    .replace(/(^\[)|(\]$)/gm, '')
+
+                const data = encodeURI(csvContent)
+                const link = document.createElement('a')
+                link.setAttribute('href', data)
+                link.setAttribute('download', `ami-e_${this.dateTimeStamp}.csv`)
+                link.click()
+
+                return
+            }
+
+            this.showWarning('No data to export as CSV')
         },
     },
 }
@@ -698,27 +747,25 @@ label:active::after {
 }
 
 .download-results:hover,
+.navigate:hover {
+    z-index: 1;
+    transform: scale(1.1);
+    cursor: default;
+}
+
 .download-results:focus,
 .download-results:active,
-.navigate:hover {
+.navigate:focus,
+.navigate:active {
     border: none;
     outline: none;
     opacity: 0.5;
-    z-index: 1;
-    transform: scale(1.1);
     cursor: default;
 }
 
 .download-results,
 .navigate {
     transition: all 0.5s;
-}
-
-.navigate:hover,
-.navigate:focus,
-.navigate:active {
-    z-index: 1;
-    transform: scale(1.1);
 }
 
 .navigate:hover,
